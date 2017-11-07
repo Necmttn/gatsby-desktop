@@ -1,0 +1,12 @@
+{
+  "name": "gatsby-desktop",
+  "version": "0.0.0",
+  "description": "gatsby desktop",
+  "main": "index.js",
+  "repository": "https://github.com/Necmttn/gatsby-desktop.git",
+  "author": "Necmettin Karakaya <necmettin.karakaya@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^1.7.9"
+  }
+}
