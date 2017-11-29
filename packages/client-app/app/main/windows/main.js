@@ -34,8 +34,17 @@ function init () {
   log.info('main win loadURL', config.WINDOW_MAIN)
   if (process.env.NODE_ENV === 'development') {
     electron.BrowserWindow.addDevToolsExtension(path.join(__dirname, '../../../node_modules/devtron'))
-    const { default: installExtension, REACT_DEVTOOLS } = require('electron-devtools-installer')
-    installExtension(REACT_DEVTOOLS)
+    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer')
+    console.log('adding react-dev tool')
+    installExtension(REACT_DEVELOPER_TOOLS)
+      .then((name) => {
+        console.log(`Added Extension:  ${name}`)
+      })
+      .catch((err) => {
+        console.log('An error occurred: ', err)
+      })
+    console.log('adding redux tool')
+    installExtension(REDUX_DEVTOOLS)
       .then((name) => {
         console.log(`Added Extension:  ${name}`)
         win.webContents.openDevTools()

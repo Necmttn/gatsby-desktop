@@ -10,8 +10,7 @@ let isElectronOpen = false
 
 function format(command, data, color) {
   return `${chalk[color](command)}  ${data.toString().trim().replace(/\n/g, '\n' + repeat(' ', command.length + 2))}
-
-  `
+`
 }
 
 function repeat (str, times) {
