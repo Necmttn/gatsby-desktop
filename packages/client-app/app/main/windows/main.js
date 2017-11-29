@@ -100,11 +100,6 @@ function getIconPath () {
 
 function onWindowBlur () {
   menu.setWindowFocus(false)
-
-  // if (process.platform !== 'darwin') {
-  //   const tray = require('../tray')
-  //   tray.setWindowFocus(false)
-  // }
 }
 
 function onWindowFocus () {
