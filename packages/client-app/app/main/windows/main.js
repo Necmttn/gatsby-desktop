@@ -5,6 +5,7 @@ const main = module.exports = {
   toggleDevTools
 }
 const electron = require('electron')
+const path = require('path')
 const app = electron.app
 const debounce = require('debounce')
 const menu = require('../menu')
