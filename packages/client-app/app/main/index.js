@@ -5,7 +5,9 @@ console.time('init')
 
 const electron = require('electron')
 const app = electron.app
-
+const windows = require('./windows')
+const { log } = require('./log')
+const menu = require('./menu')
 const crashReporter = require('../crash-reporter')
 const BrowserWindow = electron.BrowserWindow
 
@@ -13,27 +15,23 @@ const path = require('path')
 const url = require('url')
 
 let mainWindow
-const log = {
-  info: (args) => console.log(args)
-  warn: (args) => console.warn(warn)
-}
 
 function init ()  {
   let isReady = false // when is true; app ready windows can be created
   app.ipcReady = false // main window has finished loading and IPC is ready
   app.isQuitting = false
   app.on('ready', () => onReady())
-
+  console.log('start')
   function onReady (err, results) {
     log.info('app onReady')
     if (err) throw err
     isReady = true
     log.info('initialize windows')
-    windows.main.init({hidden: hidden})
-    // menu.init()
+    windows.main.init()
+    menu.init()
 
     // To keep app startup fast, some code is delayed.
-    setTimeout(delayedInit, config.DELAYED_INIT)
+    // setTimeout(delayedInit, config.DELAYED_INIT)
 
     // Report uncaught expections.
     process.on('uncaughtException', (err) => {
@@ -82,3 +80,11 @@ function init ()  {
   })
 
 }
+
+
+function onOpen (e, thing) {
+  console.log('onOpen ', thing)
+}
+
+
+init()

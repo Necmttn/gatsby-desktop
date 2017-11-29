@@ -1,18 +1,28 @@
-
-
+const main = module.exports = {
+  init,
+  dispatch,
+  hide,
+  toggleDevTools
+}
+const electron = require('electron')
+const app = electron.app
+const debounce = require('debounce')
+const menu = require('../menu')
+const config = require('../../config')
+const { log } = require('../log')
 const winConfig = {
   backgroundColor: '#FFFFFF',
   darkTheme: true, // Forces dark theme (GTK+3)
   icon: getIconPath(), // Window icon (Windows, Linux)
-  minWidth: needLogin ? config.WINDOW_LOGIN_INITIAL_BOUNDS.width : config.WINDOW_MIN_WIDTH,
-  minHeight: needLogin ? config.WINDOW_LOGIN_INITIAL_BOUNDS.height : config.WINDOW_MIN_HEIGHT,
+  minWidth: config.WINDOW_INITIAL_BOUNDS.width,
+  minHeight: config.WINDOW_INITIAL_BOUNDS.height,
   title: config.APP_WINDOW_TITLE,
   titleBarStyle: 'hiddenInset', // Hide title bar (Mac)
   useContentSize: true, // Specify web page size without OS chrome
   show: true
 }
 
-function init (options = {}) {
+function init () {
   if (main.win) {
     return main.win.show()
   }
@@ -24,7 +34,7 @@ function init (options = {}) {
   if (process.env.NODE_ENV === 'development') {
     electron.BrowserWindow.addDevToolsExtension(path.join(__dirname, '../../../node_modules/devtron'))
     const { default: installExtension, REACT_DEVTOOLS } = require('electron-devtools-installer')
-    installExtension(VUEJS_DEVTOOLS)
+    installExtension(REACT_DEVTOOLS)
       .then((name) => {
         console.log(`Added Extension:  ${name}`)
         win.webContents.openDevTools()
@@ -35,7 +45,7 @@ function init (options = {}) {
   }
   win.once('ready-to-show', () => {
     log.info('main win ready to show')
-    if (!options.hidden) win.show()
+    win.show()
   })
 
   if (win.setSheetOffset) {
@@ -77,10 +87,62 @@ function init (options = {}) {
   win.on('resize', debounce(function (e) {
     send('windowBoundsChanged', e.sender.getBounds())
   }, 1000))
-
-    if (!app.isQuitting) {
-      e.preventDefault()
-      main.win.hide()
-    }
-  })
 }
+
+function getIconPath () {
+  return process.platform === 'win32'
+    ? config.APP_ICON + '.ico'
+    : config.APP_ICON + '.png'
+}
+
+
+
+
+function onWindowBlur () {
+  menu.setWindowFocus(false)
+
+  // if (process.platform !== 'darwin') {
+  //   const tray = require('../tray')
+  //   tray.setWindowFocus(false)
+  // }
+}
+
+function onWindowFocus () {
+  menu.setWindowFocus(true)
+
+  // if (process.platform !== 'darwin') {
+  //   const tray = require('../tray')
+  //   tray.setWindowFocus(true)
+  // }
+}
+
+function dispatch (args) {
+  console.log('dispatching,', ...args)
+}
+
+
+function hide () {
+  if (!main.win) return
+  // dispatch('backToList')
+  main.win.hide()
+}
+
+function send (...args) {
+  if (!main.win) return
+  main.win.send(...args)
+}
+
+function dispatch (...args) {
+  send('dispatch', ...args)
+}
+
+function toggleDevTools () {
+  if (!main.win) return
+  log.info('toggleDevTools')
+  if (main.win.webContents.isDevToolsOpened()) {
+    main.win.webContents.closeDevTools()
+  } else {
+    main.win.webContents.openDevTools({ detach: true })
+  }
+}
+

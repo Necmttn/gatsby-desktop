@@ -1,12 +1,24 @@
 {
   "name": "gatsby-desktop",
-  "version": "0.0.0",
-  "description": "gatsby desktop",
+  "version": "0.0.1",
+  "description": "Gatsby Desktop",
   "main": "index.js",
-  "repository": "https://github.com/Necmttn/gatsby-desktop.git",
-  "author": "Necmettin Karakaya <necmettin.karakaya@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "electron": "^1.7.9"
+  "scripts": {
+    "dev": "npm run client",
+    "client": "packages/client-app/node_modules/.bin/electron packages/client-app --enable-logging --dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Necmttn/gatsby-desktop.git"
+  },
+  "author": "Necmettin Karakaya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Necmttn/gatsby-desktop/issues"
+  },
+  "homepage": "https://github.com/Necmttn/gatsby-desktop#readme",
+  "devDependencies": {
+    "lerna": "^2.5.1"
   }
 }
